@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template-index.xhtml">
+
+
+	<ui:define name="titulo">
+    #{msgs.tituloLogin}
+  </ui:define>
+	<ui:define name="cuerpo">
+		<center>
+			<h:form id="form">
+				<p:panel>
+					<p:messages id="messages" autoUpdate="true" closable="true" />
+					<p:panelGrid columns="2" cellpadding="5" id="grid">
+				#{msgs.username}
+				<h:panelGroup>
+							<p:inputText id="username" value="#{login.username}"
+								required="true" label="username" />
+						</h:panelGroup>
+				#{msgs.password}
+				<h:panelGroup>
+							<p:password id="password" value="#{login.pass}" required="true"
+								label="password" />
+						</h:panelGroup>
+						<f:facet name="footer">
+							<p:commandButton id="login" value="#{msgs.login}" update="grid"
+								process="@form" action="#{login.verifyUser}" />
+							<p:button id="register" value="#{msgs.registration}" outcome="/registro.xhtml" />
+						</f:facet>
+					</p:panelGrid>
+				</p:panel>
+			</h:form>
+		</center>
+	</ui:define>
+</ui:composition>
+
+

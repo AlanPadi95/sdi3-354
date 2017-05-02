@@ -1,0 +1,55 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template-index.xhtml">
+
+	<ui:define name="titulo">
+    #{msgs.tituloRegistro}
+  </ui:define>
+	<ui:define name="cuerpo">
+		<h:form id="form">
+			<p:panel id="panel" header="#{msgs.headerForm}"
+				style="margin-bottom:10px;">
+				<p:messages id="messages" autoUpdate="true" closable="true" />
+				<h:panelGrid columns="2" cellpadding="5" id="grid">
+					<p:outputLabel for="username" value="#{msgs.username}" />
+					<p:inputText id="username" value="#{login.username}"
+						required="true" autoUpdate="true"
+						requiredMessage="#{msgs.registration_username_requiredMessage}"
+						validatorMessage="#{msgs.registration_username_validatorMessage}">
+					</p:inputText>
+					<p:outputLabel for="email" value="#{msgs.email}" />
+					<p:inputText id="email" value="#{login.correo}" required="true"
+						autoUpdate="true"
+						requiredMessage="#{msgs.registration_correo_requiredMessage}"
+						validatorMessage="#{msgs.registration_correo_validatorMessage}">
+						<f:validateRegex pattern=".+@.+\.[a-z]+" />
+					</p:inputText>
+
+					<p:outputLabel for="password1" value="#{msgs.password}" />
+					<p:password id="password1" value="#{login.pass}" required="true"
+						autoUpdate="true" match="password2"
+						requiredMessage="#{msgs.registration_pass1_requiredMessage}"
+						validatorMessage="#{msgs.registration_pass1_validatorMessage}">
+						<f:validateRegex pattern="^[0-9a-zA-Z_.-]*$" />
+						<f:validateLength minimum="8" />
+					</p:password>
+					<p:outputLabel for="password2" value="#{msgs.repitaPassword}" />
+					<p:password id="password2" required="true" autoUpdate="true"
+						requiredMessage="#{msgs.registration_pass2_requiredMessage}"
+						validatorMessage="#{msgs.registration_pass2_validatorMessage}">
+					</p:password>
+					<f:facet name="footer">
+						<p:commandButton value="#{msgs.register}" process="@form"
+							update="grid" action="#{login.registrarse}" type="submit" />
+						<p:commandButton value="#{msgs.back}" immediate="true"
+							process="@form" action="back" />
+					</f:facet>
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

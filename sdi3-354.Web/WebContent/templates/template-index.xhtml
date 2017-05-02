@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view locale="#{settings.locale}">
+	<h:head>
+		<title>#{msgs.tituloHead}</title>
+	</h:head>
+	<h:body>
+		<h:form id="form-cabecera">
+			<center>
+				<h1>
+					#{msgs.tituloAplicacion1} <br /> <br /> <img
+						src="img/archivador.png" alt="#{msgs.tituloAplicacion2}"
+						width="100" height="100" />
+				</h1>
+			</center>
+			<table border="5" align="center">
+				<tr>
+					<th class="title"><ui:insert name="titulo">#{msgs.tituloDefectoCabecera}</ui:insert>
+					</th>
+				</tr>
+			</table>
+			<br />
+			<p:menubar>
+				<ui:insert name="opciones"></ui:insert>
+				<p:submenu style="float:right" label="#{msgs.textoIdioma}"
+					icon="ui-icon-document">
+					<p:menuitem value="#{msgs.enlaceIdiomaES}"
+						actionListener="#{settings.setSpanish}" update="@all" />
+					<p:menuitem value="#{msgs.enlaceIdiomaEN}"
+						actionListener="#{settings.setEnglish}" update="@all" />
+				</p:submenu>
+			</p:menubar>
+		</h:form>
+		<ui:insert name="cuerpo">#{msgs.tituloDefectoCuerpo}</ui:insert>
+	</h:body>
+</f:view>
+</html>

@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/templates/template-index.xhtml">
+	<ui:define name="titulo">
+			#{msgs.tituloTask}
+		
+	</ui:define>
+	<ui:define name="opciones">
+		<p:submenu style="float:left" label="#{msgs.opciones}">
+			<p:menuitem value="#{msgs.home}" action="#{user.vaciarCampos}"
+				update="@all" />
+			<p:menuitem id="cerrarSesion" value="#{msgs.cerrarSesion}"
+				action="#{login.cerrarSesion}" />
+		</p:submenu>
+	</ui:define>
+	<ui:define name="cuerpo">
+		<h:form id="form">
+			<p:panel id="panel" header="#{msgs.tituloTask}"
+				style="margin-bottom:10px;">
+				<h:panelGrid columns="1" cellpadding="3" id="grid">
+
+					<p:outputLabel for="nombre" value="#{msgs.name}" />
+					<p:inputText id="nombre" value="#{user.name}" required="true"
+						autoUpdate="true"
+						requiredMessage="#{msgs.title_task_requiredMessage}" />
+					<p:message for="nombre" />
+
+					<p:selectOneMenu id="category" value="#{user.category}">
+						<f:selectItem itemLabel="#{msgs.selectedCategory}"
+							noSelectionOption="true" itemValue="null" />
+						<f:selectItems value="#{user.categories}" />
+					</p:selectOneMenu>
+
+					<p:outputLabel for="comentario" value="#{msgs.comment}" />
+					<p:inputTextarea id="comentario" value="#{user.comment}" />
+					<p:message for="comentario" />
+
+					<p:outputLabel for="calendario" value="#{msgs.calendar}" />
+					<p:calendar id="calendario" value="#{user.plannedDate}"
+						placeholder="Ej:1/1/17" showOn="button">
+						<f:convertDateTime pattern="dd/MM/yy" timeZone="CET" />
+					</p:calendar>
+					<p:message for="calendario" />
+				</h:panelGrid>
+				<f:facet name="footer">
+					<c:if test="#{user.name == null}">
+						<p:commandButton id="anadir" value="#{msgs.confirmar}"
+							update="grid" process="@form" action="#{user.addTarea}"
+							type="submit" />
+					</c:if>
+					<c:if test="#{user.name != null}">
+						<p:commandButton id="editar" value="#{msgs.confirmar}"
+							update="grid" process="@form" action="#{user.editTarea}"
+							type="submit" />
+					</c:if>
+				</f:facet>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>

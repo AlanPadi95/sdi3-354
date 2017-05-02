@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/template-index.xhtml">
+
+	<ui:define name="titulo">
+    #{msgs.tituloUserIndex}
+  </ui:define>
+	<ui:define name="opciones">
+		<p:submenu style="float:left" label="#{msgs.opciones}">
+			<p:menuitem value="#{msgs.addTask}" action="addTask" update="@all" />
+			<p:menuitem id="cerrarSesion" value="#{msgs.cerrarSesion}"
+				action="#{login.cerrarSesion}" />
+		</p:submenu>
+	</ui:define>
+	<ui:define name="cuerpo">
+		<h:form id="form">
+			<h:panelGrid columns="2">
+				<h:panelGroup>
+					<p:menubar style="position:fixed; top:2%;">
+						<p:menuitem id="notFinished" value="#{msgs.noTerminadas}"
+							action="#{user.listInitialTask}" update="@form" />
+						<p:submenu label="#{msgs.inbox}">
+							<p:menuitem id="inbox" value="#{msgs.todo}"
+								action="#{user.listInbox}" update="@form" />
+							<p:menuitem id="inboxNotFinished" value="#{msgs.noTerminadas}"
+								action="#{user.listInboxNotFinished}" update="@form" />
+							<p:menuitem id="inboxFinished" value="#{msgs.finalizadas}"
+								action="#{user.listInboxFinished}" update="@form" />
+						</p:submenu>
+						<p:menuitem id="today" value="#{msgs.hoy}"
+							action="#{user.listHoy}" update="@form" />
+						<p:menuitem id="week" value="#{msgs.semana}"
+							action="#{user.listSemana}" update="@form" />
+					</p:menubar>
+				</h:panelGroup>
+				<h:panelGroup>
+					<p:dataTable var="task" value="#{user.tareas}"
+						filteredValue="#{user.filteredTask}" border="1" id="tablalistado"
+						widgetVar="tablalistado" sortMode="multiple" rows="8"
+						paginator="true"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+						<p:column id="title" filterBy="#{task.title}"
+							headerText="#{msgs.title}" filterMatchMode="contains"
+							sortBy="#{task.title}" update="@form">
+							<h:outputText
+								style="background-color:#{task.finished ne null and user.isInbox ? 'green' : initial}"
+								id="titleElement" value="#{task.title}" />
+						</p:column>
+
+						<p:column id="comments" headerText="#{msgs.comments}"
+							sortBy="#{task.comments}">
+							<h:outputText id="commentsElement" value="#{task.comments}"
+								update="@form" />
+						</p:column>
+
+						<p:column id="category"
+							filterBy="#{user.getTaskCategory(task.categoryId)}"
+							headerText="#{msgs.category}" filterMatchMode="in" update="@form"
+							sortBy="#{user.getTaskCategory(task.categoryId)}">
+							<f:facet name="filter">
+								<p:selectCheckboxMenu label="#{msgs.selectedCategory}"
+									onchange="PF('tablalistado').filter()" update="@form"
+									style="display:#{user.isInbox ? 'none':'inline'}">
+									<f:selectItems value="#{user.categories.toArray()}" />
+								</p:selectCheckboxMenu>
+							</f:facet>
+							<h:outputText id="categoryElement"
+								style="background-color:#{ task.planned lt user.today and task.finished eq null and user.isSemana ? 'red' : initial}"
+								value="#{user.getTaskCategory(task.categoryId)}" />
+						</p:column>
+						<p:column id="created" headerText="#{msgs.created}"
+							sortBy="#{task.created}" update="@form">
+							<h:outputText id="createdElement" value="#{task.created}">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="CET" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="planned" headerText="#{msgs.planned}"
+							sortBy="#{task.planned}" update="@form">
+							<h:outputText id="plannedElement" value="#{task.planned}"
+								style="background-color:#{ task.planned lt user.today and task.finished eq null and user.isInboxOrHoy ? 'red' : initial}">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="CET" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="finished" headerText="#{msgs.finished}"
+							sortBy="#{task.finished}" update="@form">
+							<h:outputText id="finishedElement" value="#{task.finished}">
+								<f:convertDateTime pattern="dd/MM/yyyy" timeZone="CET" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="edit" headerText="#{msgs.editTask}">
+							<p:commandButton id="editButton" icon="ui-icon-pencil"
+								action="#{user.saveTask(task)}" update="@form" />
+						</p:column>
+
+						<p:column id="marckAsFinished" headerText="#{msgs.markAsFinished}">
+							<p:commandButton id="marAsFinishedButton" icon="ui-icon-check"
+								action="#{user.markAsFinished(task)}" immediate="true"
+								update="@form" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGroup>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>
